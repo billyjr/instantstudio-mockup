@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css" />
     <link rel="stylesheet" href="./stylesheets/styles.css">
 
-
     <script>
       tailwind.config = {
         theme: {
@@ -165,10 +164,6 @@
         <section id="workbenchPanel" class="workbench-panel app-column is-active flex w-[440px] shrink-0 flex-col px-3 py-6 shadow-border bg-white">
           <form class="workbench-form flex min-h-0 flex-1 flex-col">
             <div class="workbench-scroll scrollbar-hidden min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
-              <div class="mb-10">
-                <h1 class="font-display text-[44px] leading-[1.06] tracking-hero text-brand-secondary">Image Anything</h1>
-              </div>
-
               <div>
               <label class="mb-2 block text-sm font-medium text-gray-900">Model</label>
               <div class="relative">
@@ -246,7 +241,7 @@
             </div>
 
             <div class="generate-bar shrink-0 border-t border-black/5 bg-white/95 pt-4 backdrop-blur">
-              <button type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-primary px-4 py-2.5 text-sm font-medium text-brand-secondary shadow-sm transition hover:bg-brand-orange300 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
+              <button type="button" data-a11y-dialog-show="generation-dialog" class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-primary px-4 py-2.5 text-sm font-medium text-brand-secondary shadow-sm transition hover:bg-brand-orange300 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
                 <i class="fi fi-rr-sparkles text-[13px]"></i>
                 Generate
               </button>
@@ -255,155 +250,107 @@
         </section>
 
         <section id="outputsPanel" class="outputs-panel app-column min-w-0 flex-1 overflow-y-auto px-3 py-6 bg-[var(--color-paper)]">
-          <div class="mb-10">
-            <h2 class="font-display text-[44px] leading-[1.06] tracking-hero text-brand-secondary">Recent Outputs</h2>
-          </div>
-
           <div class="masonry" id="gallery"></div>
         </section>
       </div>
     </div>
 
-    <script>
-      const placeholders = [
-        { title: "Editorial Portrait", height: 430, likes: "1.2k" },
-        { title: "Studio Fashion", height: 320, likes: "864" },
-        { title: "Product Scene", height: 368, likes: "522" },
-        { title: "Sci-Fi Character", height: 470, likes: "1.9k" },
-        { title: "Luxury Campaign", height: 340, likes: "973" },
-        { title: "Concept Art", height: 390, likes: "618" },
-        { title: "Beauty Close-Up", height: 300, likes: "739" },
-        { title: "Sports Ad", height: 448, likes: "1.1k" }
-      ];
+    <div id="generation-dialog" class="dialog-container" role="dialog" aria-hidden="true" aria-labelledby="generation-dialog-title">
+      <div class="dialog-overlay" data-a11y-dialog-hide></div>
+      <div class="dialog-content shadow-card" role="document">
+        <button type="button" class="dialog-close" data-a11y-dialog-hide aria-label="Close dialog">
+          <i class="fi fi-rr-cross-small text-[16px]"></i>
+        </button>
 
-      const gallery = document.getElementById("gallery");
-      const mobileBackdrop = document.getElementById("mobileBackdrop");
-      const mobileMenuButton = document.getElementById("mobileMenuButton");
-      const mobileWorkbenchTab = document.getElementById("mobileWorkbenchTab");
-      const mobileOutputsTab = document.getElementById("mobileOutputsTab");
-      const workbenchPanel = document.getElementById("workbenchPanel");
-      const outputsPanel = document.getElementById("outputsPanel");
+        <div class="dialog-badge font-functional">generation queued</div>
+        <h3 id="generation-dialog-title" class="dialog-title font-display">Generation request ready</h3>
+        <p class="dialog-copy">
+          This modal is wired with <code>a11y-dialog</code> and can be reused for confirmations, generation progress, or output actions.
+        </p>
 
-      const svgDataUri = (title, height) => {
-        const svg = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="800" height="${height}" viewBox="0 0 800 ${height}">
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#F1EEE7"/>
-                <stop offset="100%" stop-color="#ffffff"/>
-              </linearGradient>
-            </defs>
-            <rect width="800" height="${height}" rx="24" fill="url(#g)" />
-            <rect x="1" y="1" width="798" height="${height - 2}" rx="23" fill="none" stroke="#ebebeb" />
-            <rect x="54" y="54" width="190" height="8" rx="4" fill="#FF623D" />
-            <rect x="54" y="${Math.max(100, height - 152)}" width="470" height="90" rx="18" fill="#ffffff" stroke="#ebebeb" />
-            <circle cx="648" cy="102" r="82" fill="#F7E9E3" stroke="#ebebeb" />
-            <circle cx="160" cy="${Math.max(170, height - 110)}" r="104" fill="#ffffff" stroke="#ebebeb" />
-            <text x="54" y="${Math.max(164, height - 94)}" fill="#4A1114" font-family="Hubot Sans Semi-Condensed, sans-serif" font-size="40" font-weight="700">${title}</text>
-            <text x="54" y="${Math.max(198, height - 54)}" fill="#A09A9B" font-family="DM Sans, Arial, sans-serif" font-size="20" font-weight="400">Generated placeholder preview</text>
-          </svg>`;
-        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-      };
-
-      placeholders.forEach((item) => {
-        const card = document.createElement("article");
-        card.className = "masonry-item group relative overflow-hidden rounded-xl bg-white shadow-card";
-        card.innerHTML = `
-          <img src="${svgDataUri(item.title, item.height)}" alt="${item.title}" class="h-auto w-full object-cover" />
-          <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(74,17,20,0.22),rgba(74,17,20,0.03),transparent)] opacity-0 transition duration-200 group-hover:opacity-100"></div>
-          <div class="absolute inset-x-3 top-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-            <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.title}</span>
-            <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-              <i class="fi fi-rr-bookmark text-[13px]"></i>
-            </button>
+        <div class="dialog-summary">
+          <div class="dialog-summary-row">
+            <span class="dialog-summary-label">Model</span>
+            <span class="dialog-summary-value">Wan 2.7 Image</span>
           </div>
-          <div class="absolute inset-x-3 bottom-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-            <div class="flex items-center gap-2">
-              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-                <i class="fi fi-rr-heart text-[13px]"></i>
-              </button>
-              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-                <i class="fi fi-rr-folder-plus text-[13px]"></i>
-              </button>
-              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-                <i class="fi fi-rr-trash text-[13px]"></i>
-              </button>
+          <div class="dialog-summary-row">
+            <span class="dialog-summary-label">Queue status</span>
+            <span class="dialog-summary-value">Ready to dispatch</span>
+          </div>
+          <div class="dialog-summary-row">
+            <span class="dialog-summary-label">Outputs</span>
+            <span class="dialog-summary-value">4 previews</span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="dialog-secondary-action" data-a11y-dialog-hide>
+            Keep Editing
+          </button>
+          <button type="button" class="dialog-primary-action" data-a11y-dialog-hide>
+            Confirm Generate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sample-dialog" class="sample-dialog-container" role="dialog" aria-hidden="true" aria-labelledby="sample-dialog-title">
+      <div class="sample-dialog-shell" role="document">
+        <div class="sample-dialog-stage">
+          <button type="button" class="sample-dialog-close sample-dialog-close-stage" data-a11y-dialog-hide aria-label="Close image preview">
+            <i class="fi fi-rr-cross-small text-[18px]"></i>
+          </button>
+          <img id="sampleDialogImage" src="" alt="" class="sample-dialog-image" />
+        </div>
+
+        <aside class="sample-dialog-panel">
+          <button type="button" class="sample-dialog-close" data-a11y-dialog-hide aria-label="Close image details">
+            <i class="fi fi-rr-cross-small text-[18px]"></i>
+          </button>
+
+          <div class="sample-dialog-panel-scroll">
+            <div class="sample-dialog-eyebrow font-functional" id="sampleDialogEyebrow">sample output</div>
+            <h3 id="sample-dialog-title" class="sample-dialog-title font-display"></h3>
+            <p id="sampleDialogDescription" class="sample-dialog-description"></p>
+
+            <div class="sample-dialog-meta">
+              <div class="sample-dialog-meta-row">
+                <span class="sample-dialog-meta-label">Model</span>
+                <span class="sample-dialog-meta-value" id="sampleDialogModel"></span>
+              </div>
+              <div class="sample-dialog-meta-row">
+                <span class="sample-dialog-meta-label">Aspect Ratio</span>
+                <span class="sample-dialog-meta-value" id="sampleDialogRatio"></span>
+              </div>
+              <div class="sample-dialog-meta-row">
+                <span class="sample-dialog-meta-label">Resolution</span>
+                <span class="sample-dialog-meta-value" id="sampleDialogResolution"></span>
+              </div>
+              <div class="sample-dialog-meta-row">
+                <span class="sample-dialog-meta-label">Created</span>
+                <span class="sample-dialog-meta-value" id="sampleDialogCreated"></span>
+              </div>
+              <div class="sample-dialog-meta-row">
+                <span class="sample-dialog-meta-label">Credits</span>
+                <span class="sample-dialog-meta-value" id="sampleDialogCredits"></span>
+              </div>
             </div>
-            <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.likes}</span>
+
+            <div class="sample-dialog-section">
+              <div class="sample-dialog-section-label font-functional">Prompt</div>
+              <p id="sampleDialogPrompt" class="sample-dialog-body"></p>
+            </div>
+
+            <div class="sample-dialog-section">
+              <div class="sample-dialog-section-label font-functional">Tags</div>
+              <div id="sampleDialogTags" class="sample-dialog-tags"></div>
+            </div>
           </div>
-        `;
-        gallery.appendChild(card);
-      });
+        </aside>
+      </div>
+    </div>
 
-      const sidebar = document.getElementById("sidebar");
-      const sidebarToggle = document.getElementById("sidebarToggle");
-      const mobileBreakpoint = window.matchMedia("(max-width: 960px)");
-
-      sidebarToggle.addEventListener("click", () => {
-        if (mobileBreakpoint.matches) {
-          closeMobileMenu();
-          return;
-        }
-
-        const isCollapsed = sidebar.classList.toggle("is-collapsed");
-        sidebarToggle.setAttribute("aria-expanded", String(!isCollapsed));
-        sidebarToggle.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
-      });
-
-      const setMobileTab = (panel) => {
-        const showWorkbench = panel === "workbench";
-        workbenchPanel.classList.toggle("is-active", showWorkbench);
-        outputsPanel.classList.toggle("is-active", !showWorkbench);
-        mobileWorkbenchTab.classList.toggle("is-active", showWorkbench);
-        mobileOutputsTab.classList.toggle("is-active", !showWorkbench);
-      };
-
-      const closeMobileMenu = () => {
-        sidebar.classList.remove("is-mobile-open");
-        mobileBackdrop.classList.remove("is-open");
-      };
-
-      const openMobileMenu = () => {
-        sidebar.classList.add("is-mobile-open");
-        mobileBackdrop.classList.add("is-open");
-      };
-
-      mobileMenuButton.addEventListener("click", () => {
-        if (sidebar.classList.contains("is-mobile-open")) {
-          closeMobileMenu();
-        } else {
-          openMobileMenu();
-        }
-      });
-
-      mobileBackdrop.addEventListener("click", closeMobileMenu);
-      mobileWorkbenchTab.addEventListener("click", () => setMobileTab("workbench"));
-      mobileOutputsTab.addEventListener("click", () => setMobileTab("outputs"));
-
-      const syncResponsiveState = () => {
-        if (mobileBreakpoint.matches) {
-          sidebar.classList.remove("is-collapsed");
-          sidebarToggle.setAttribute("aria-expanded", "false");
-          sidebarToggle.setAttribute("aria-label", "Close sidebar");
-          setMobileTab(mobileOutputsTab.classList.contains("is-active") ? "outputs" : "workbench");
-        } else {
-          closeMobileMenu();
-          workbenchPanel.classList.add("is-active");
-          outputsPanel.classList.remove("is-active");
-          mobileWorkbenchTab.classList.add("is-active");
-          mobileOutputsTab.classList.remove("is-active");
-          sidebarToggle.setAttribute("aria-expanded", String(!sidebar.classList.contains("is-collapsed")));
-          sidebarToggle.setAttribute("aria-label", sidebar.classList.contains("is-collapsed") ? "Expand sidebar" : "Collapse sidebar");
-        }
-      };
-
-      if (mobileBreakpoint.addEventListener) {
-        mobileBreakpoint.addEventListener("change", syncResponsiveState);
-      } else {
-        mobileBreakpoint.addListener(syncResponsiveState);
-      }
-
-      syncResponsiveState();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/a11y-dialog@8/dist/a11y-dialog.min.js"></script>
+    <script src="./application.js"></script>
   </body>
 </html>
