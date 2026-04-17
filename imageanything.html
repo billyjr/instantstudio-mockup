@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instant Studio Toolkit — Image Anything</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+    <link rel="stylesheet" href="./stylesheets/styles.css">
+
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                primary: '#FF623D',
+                secondary: '#4A1114',
+                accent: '#D135FF',
+                orange50: '#F7E9E3',
+                orange150: '#F7E2D4',
+                orange250: '#FFC7A8',
+                orange300: '#FF9771'
+              },
+              instant: {
+                ink: '#2B2829',
+                inkLite: '#A09A9B',
+                paper: '#F1EEE7',
+                paperLite: '#FAF8F4',
+                line: 'rgba(0,0,0,0.08)',
+                textSoft: '#615b5c',
+                textMuted: '#8b8586',
+                white: '#ffffff'
+              }
+            },
+            letterSpacing: {
+              hero: '-2.1px',
+              section: '-1.1px',
+              ui: '-0.24px'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+
+  <body class="bg-instant-paper text-instant-ink antialiased">
+    <div class="app-shell">
+      <div class="mx-auto flex h-full max-w-[1600px]">
+        <aside id="sidebar" class="sidebar-shell relative flex shrink-0 flex-col px-3 py-5 shadow-border bg-[var(--color-paper)]">
+          <div class="sidebar-header mb-10 flex items-center justify-between">
+            <div class="sidebar-brand-wrap flex items-center gap-3">
+              <img
+                src="./images/instant-studio-logo-dark.svg"
+                alt="Instant Studio"
+                class="sidebar-brand-logo h-10 w-auto"
+              />
+              <img
+                src="./images/instant-studio-icon-dark.svg"
+                alt="Instant Studio"
+                class="sidebar-brand-icon h-10 w-10"
+              />
+            </div>
+            <button id="sidebarToggle" type="button" class="sidebar-toggle flex h-9 w-9 items-center justify-center rounded-full bg-white text-instant-ink shadow-border transition hover:bg-brand-orange50 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar">
+              <i class="sidebar-toggle-icon fi fi-rr-angle-left text-[12px]"></i>
+            </button>
+          </div>
+
+          <nav class="space-y-1">
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-generations.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Generations</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-portfolios.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Portfolios</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg bg-brand-secondary px-3 py-2.5 text-[14px] font-medium text-white">
+              <span class="flex h-5 w-5 items-center justify-center text-brand-primary">
+                <img src="./images/icon-image-anything.svg" alt="" class="nav-icon nav-icon-active" />
+              </span>
+              <span class="nav-label">Image Anything</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-image-to-video.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Image to Video</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-audio.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Audio</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-canvas.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Canvas</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-remove-background.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Remove background</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-workflow.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Workflows</span>
+            </a>
+            <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
+              <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
+                <img src="./images/icon-tshirt.svg" alt="" class="nav-icon" />
+              </span>
+              <span class="nav-label">Virtual Try-on</span>
+            </a>
+          </nav>
+
+          <div class="sidebar-footer mt-auto pt-6">
+            <div class="sidebar-user-summary flex items-center gap-3.5">
+              <img
+                src="./images/avatar-user.svg"
+                alt="Studio user"
+                class="sidebar-user-avatar h-12 w-12 rounded-2xl object-cover shadow-border"
+              />
+              <div class="sidebar-user-meta min-w-0 flex flex-col items-start gap-2.5">
+                <div class="queue-status-row queue-pill flex items-center gap-2 whitespace-nowrap text-[13px] font-medium leading-none text-instant-ink">
+                  <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#61C46E] text-[#18341A]">
+                    <i class="fi fi-rr-check text-[11px]"></i>
+                  </span>
+                  <span class="queue-status-text">Queue: All Clear</span>
+                </div>
+
+                <div class="credits-row credit-pill inline-flex items-center gap-2 whitespace-nowrap">
+                  <span class="inline-flex h-6 w-6 items-center justify-center text-[#F2BA39]">
+                    <i class="fi fi-rr-bolt text-[16px]"></i>
+                  </span>
+                  <span class="credits-label font-functional text-[12px] uppercase tracking-[0.08em] text-instant-inkLite">Credits</span>
+                  <span class="credits-value text-[20px] font-medium leading-none tracking-[-0.03em] text-instant-ink">1250</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="app-column flex w-[440px] shrink-0 flex-col px-3 py-6 shadow-border bg-white">
+          <div class="mb-10 shrink-0">
+            <h1 class="font-display text-[44px] leading-[1.06] tracking-hero text-brand-secondary">Image Anything</h1>
+          </div>
+
+          <form class="flex min-h-0 flex-1 flex-col">
+            <div class="scrollbar-hidden min-h-0 flex-1 space-y-6 overflow-y-auto pb-6 pr-1">
+              <div>
+              <label class="mb-2 block text-[14px] font-medium text-instant-ink">Model</label>
+              <div class="relative rounded-lg bg-white shadow-border">
+                <select class="w-full appearance-none rounded-lg bg-transparent px-4 py-3 text-[14px] font-medium text-instant-ink outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
+                  <option>Wan 2.7 Image</option>
+                  <option>Nano Banana 2</option>
+                  <option>GPT Image 1.5</option>
+                  <option>SeeDream 4.5</option>
+                </select>
+                <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[14px] text-instant-textMuted"></i>
+              </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="block text-[14px] font-medium text-instant-ink">Prompt</label>
+                  <span class="font-functional text-[11px] uppercase tracking-[0.12em] text-instant-inkLite">primary</span>
+                </div>
+                <div class="rounded-xl bg-white shadow-card">
+                  <textarea rows="9" class="w-full resize-none rounded-xl bg-transparent px-4 py-4 text-[16px] leading-[1.5] text-instant-ink outline-none placeholder:text-instant-textMuted focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" placeholder="Describe the subject, styling, lighting, camera language, composition, and intended output."></textarea>
+                </div>
+              </div>
+
+              <div>
+                <label class="mb-2 block text-[14px] font-medium text-instant-ink">Tags</label>
+                <div class="rounded-lg bg-white shadow-border">
+                  <input type="text" value="portrait, editorial, premium" class="w-full rounded-lg bg-transparent px-4 py-3 text-[14px] text-instant-ink outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" />
+                </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="block text-[14px] font-medium text-instant-ink">Reference Images</label>
+                  <span class="font-functional text-[11px] uppercase tracking-[0.12em] text-instant-inkLite">max 4</span>
+                </div>
+                <label class="block cursor-pointer rounded-xl bg-white p-6 text-center shadow-card transition hover:bg-brand-orange50/30">
+                  <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-border">
+                    <i class="fi fi-rr-picture text-[16px] text-brand-secondary"></i>
+                  </div>
+                  <p class="mt-4 text-[14px] font-medium text-instant-ink">Drag images here or click to upload</p>
+                  <p class="mt-1 text-[14px] leading-6 text-instant-textSoft">PNG, JPG, WEBP · portrait, style, or object references</p>
+                  <input type="file" class="hidden" multiple />
+                </label>
+                <div class="mt-3 grid grid-cols-4 gap-3">
+                  <div class="aspect-square rounded-xl bg-brand-orange50 shadow-border"></div>
+                  <div class="aspect-square rounded-xl bg-white shadow-border"></div>
+                  <div class="aspect-square rounded-xl bg-white shadow-border"></div>
+                  <div class="aspect-square rounded-xl bg-white shadow-border"></div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="mb-2 block text-[14px] font-medium text-instant-ink">Aspect Ratio</label>
+                  <div class="relative rounded-lg bg-white shadow-border">
+                    <select class="w-full appearance-none rounded-lg bg-transparent px-4 py-3 text-[14px] font-medium text-instant-ink outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
+                      <option>1:1 Square</option>
+                      <option>4:3 Classic</option>
+                      <option>3:4 Portrait</option>
+                      <option>16:9 Landscape</option>
+                      <option>9:16 Vertical</option>
+                    </select>
+                    <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[14px] text-instant-textMuted"></i>
+                  </div>
+                </div>
+                <div>
+                  <label class="mb-2 block text-[14px] font-medium text-instant-ink">Resolution</label>
+                  <div class="relative rounded-lg bg-white shadow-border">
+                    <select class="w-full appearance-none rounded-lg bg-transparent px-4 py-3 text-[14px] font-medium text-instant-ink outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
+                      <option>1024 × 1024</option>
+                      <option>1280 × 1280</option>
+                      <option>1536 × 1024</option>
+                      <option>1024 × 1536</option>
+                    </select>
+                    <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[14px] text-instant-textMuted"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="shrink-0 border-t border-black/5 bg-white/95 pt-4 backdrop-blur">
+              <button type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-primary px-4 py-3 text-[14px] font-medium text-brand-secondary transition hover:brightness-[0.97] focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
+                <i class="fi fi-rr-sparkles text-[13px]"></i>
+                Generate
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="app-column min-w-0 flex-1 overflow-y-auto px-3 py-6 bg-[var(--color-paper)]">
+          <div class="mb-10">
+            <h2 class="font-display text-[44px] leading-[1.06] tracking-hero text-brand-secondary">Recent Outputs</h2>
+          </div>
+
+          <div class="masonry" id="gallery"></div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const placeholders = [
+        { title: "Editorial Portrait", height: 430, likes: "1.2k" },
+        { title: "Studio Fashion", height: 320, likes: "864" },
+        { title: "Product Scene", height: 368, likes: "522" },
+        { title: "Sci-Fi Character", height: 470, likes: "1.9k" },
+        { title: "Luxury Campaign", height: 340, likes: "973" },
+        { title: "Concept Art", height: 390, likes: "618" },
+        { title: "Beauty Close-Up", height: 300, likes: "739" },
+        { title: "Sports Ad", height: 448, likes: "1.1k" }
+      ];
+
+      const gallery = document.getElementById("gallery");
+
+      const svgDataUri = (title, height) => {
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="800" height="${height}" viewBox="0 0 800 ${height}">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#F1EEE7"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+            </defs>
+            <rect width="800" height="${height}" rx="24" fill="url(#g)" />
+            <rect x="1" y="1" width="798" height="${height - 2}" rx="23" fill="none" stroke="#ebebeb" />
+            <rect x="54" y="54" width="190" height="8" rx="4" fill="#FF623D" />
+            <rect x="54" y="${Math.max(100, height - 152)}" width="470" height="90" rx="18" fill="#ffffff" stroke="#ebebeb" />
+            <circle cx="648" cy="102" r="82" fill="#F7E9E3" stroke="#ebebeb" />
+            <circle cx="160" cy="${Math.max(170, height - 110)}" r="104" fill="#ffffff" stroke="#ebebeb" />
+            <text x="54" y="${Math.max(164, height - 94)}" fill="#4A1114" font-family="Hubot Sans Semi-Condensed, sans-serif" font-size="40" font-weight="700">${title}</text>
+            <text x="54" y="${Math.max(198, height - 54)}" fill="#A09A9B" font-family="DM Sans, Arial, sans-serif" font-size="20" font-weight="400">Generated placeholder preview</text>
+          </svg>`;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      };
+
+      placeholders.forEach((item) => {
+        const card = document.createElement("article");
+        card.className = "masonry-item group relative overflow-hidden rounded-xl bg-white shadow-card";
+        card.innerHTML = `
+          <img src="${svgDataUri(item.title, item.height)}" alt="${item.title}" class="h-auto w-full object-cover" />
+          <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(74,17,20,0.22),rgba(74,17,20,0.03),transparent)] opacity-0 transition duration-200 group-hover:opacity-100"></div>
+          <div class="absolute inset-x-3 top-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+            <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.title}</span>
+            <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
+              <i class="fi fi-rr-bookmark text-[13px]"></i>
+            </button>
+          </div>
+          <div class="absolute inset-x-3 bottom-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+            <div class="flex items-center gap-2">
+              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
+                <i class="fi fi-rr-heart text-[13px]"></i>
+              </button>
+              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
+                <i class="fi fi-rr-folder-plus text-[13px]"></i>
+              </button>
+              <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
+                <i class="fi fi-rr-trash text-[13px]"></i>
+              </button>
+            </div>
+            <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.likes}</span>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+
+      const sidebar = document.getElementById("sidebar");
+      const sidebarToggle = document.getElementById("sidebarToggle");
+
+      sidebarToggle.addEventListener("click", () => {
+        const isCollapsed = sidebar.classList.toggle("is-collapsed");
+        sidebarToggle.setAttribute("aria-expanded", String(!isCollapsed));
+        sidebarToggle.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
+      });
+    </script>
+  </body>
+</html>
