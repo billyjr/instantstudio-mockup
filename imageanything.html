@@ -72,8 +72,8 @@
                 class="sidebar-brand-icon h-10 w-10"
               />
             </div>
-            <button id="sidebarToggle" type="button" class="sidebar-toggle flex h-9 w-9 items-center justify-center rounded-full bg-white text-instant-ink shadow-border transition hover:bg-brand-orange50 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar">
-              <i class="sidebar-toggle-icon fi fi-rr-angle-left text-[12px]"></i>
+            <button id="sidebarToggle" type="button" class="sidebar-toggle flex h-9 w-9 items-center justify-center text-instant-ink transition hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar">
+              <i class="sidebar-toggle-icon fi fi-rr-angle-square-left text-[32px]"></i>
             </button>
           </div>
 
@@ -297,18 +297,49 @@
     <div id="sample-dialog" class="sample-dialog-container" role="dialog" aria-hidden="true" aria-labelledby="sample-dialog-title">
       <div class="sample-dialog-shell" role="document">
         <div class="sample-dialog-stage">
-          <button type="button" class="sample-dialog-close sample-dialog-close-stage" data-a11y-dialog-hide aria-label="Close image preview">
+          <button type="button" class="sample-dialog-close sample-dialog-close-stage sample-dialog-stage-close" data-a11y-dialog-hide aria-label="Close image preview">
             <i class="fi fi-rr-cross-small text-[18px]"></i>
           </button>
+
+          <div class="sample-dialog-toolbar">
+            <button type="button" class="sample-dialog-toolbar-button sample-dialog-toolbar-close" data-a11y-dialog-hide aria-label="Close image preview">
+              <i class="fi fi-rr-cross-small text-[18px]"></i>
+            </button>
+            <div class="sample-dialog-toolbar-actions">
+              <button type="button" class="sample-dialog-toolbar-button" aria-label="Share sample">
+                <i class="fi fi-rr-share text-[15px]"></i>
+              </button>
+              <button type="button" class="sample-dialog-toolbar-button" aria-label="Download sample">
+                <i class="fi fi-rr-download text-[15px]"></i>
+              </button>
+              <button type="button" class="sample-dialog-toolbar-button" aria-label="Edit sample">
+                <i class="fi fi-rr-pencil text-[15px]"></i>
+              </button>
+              <button type="button" class="sample-dialog-toolbar-button" aria-label="Favorite sample">
+                <i class="fi fi-rr-star text-[15px]"></i>
+              </button>
+            </div>
+          </div>
           <img id="sampleDialogImage" src="" alt="" class="sample-dialog-image" />
         </div>
 
-        <aside class="sample-dialog-panel">
+        <aside id="sampleDialogPanel" class="sample-dialog-panel">
+          <button
+            id="sampleDialogDrawerToggle"
+            type="button"
+            class="sample-dialog-drawer-toggle"
+            aria-expanded="false"
+            aria-controls="sampleDialogPanelScroll"
+            aria-label="Expand image information"
+          >
+            <span class="sample-dialog-drawer-handle" aria-hidden="true"></span>
+          </button>
+
           <button type="button" class="sample-dialog-close" data-a11y-dialog-hide aria-label="Close image details">
             <i class="fi fi-rr-cross-small text-[18px]"></i>
           </button>
 
-          <div class="sample-dialog-panel-scroll">
+          <div id="sampleDialogPanelScroll" class="sample-dialog-panel-scroll">
             <div class="sample-dialog-eyebrow font-functional" id="sampleDialogEyebrow">sample output</div>
             <h3 id="sample-dialog-title" class="sample-dialog-title font-display"></h3>
             <p id="sampleDialogDescription" class="sample-dialog-description"></p>

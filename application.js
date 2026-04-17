@@ -85,6 +85,9 @@ const placeholders = Array.from({ length: 20 }, (_, index) => {
     title,
     likes,
     imageUrl,
+    imageWidth: ratio.width,
+    imageHeight: ratio.height,
+    aspectValue: ratio.width / ratio.height,
     aspectRatio: ratio.label,
     resolution: `${ratio.width} × ${ratio.height}`,
     model: modelOptions[index % modelOptions.length],
@@ -104,7 +107,9 @@ const mobileOutputsTab = document.getElementById("mobileOutputsTab");
 const workbenchPanel = document.getElementById("workbenchPanel");
 const outputsPanel = document.getElementById("outputsPanel");
 const sidebar = document.getElementById("sidebar");
+const sidebarHeader = sidebar ? sidebar.querySelector(".sidebar-header") : null;
 const sidebarToggle = document.getElementById("sidebarToggle");
+const sidebarToggleIcon = sidebarToggle ? sidebarToggle.querySelector(".sidebar-toggle-icon") : null;
 const mobileBreakpoint = window.matchMedia("(max-width: 960px)");
 const generationDialogElement = document.getElementById("generation-dialog");
 const sampleDialogElement = document.getElementById("sample-dialog");
@@ -119,37 +124,36 @@ const sampleDialogCreated = document.getElementById("sampleDialogCreated");
 const sampleDialogCredits = document.getElementById("sampleDialogCredits");
 const sampleDialogPrompt = document.getElementById("sampleDialogPrompt");
 const sampleDialogTags = document.getElementById("sampleDialogTags");
+const sampleDialogDrawerToggle = document.getElementById("sampleDialogDrawerToggle");
 
 let sampleDialog = null;
+let galleryRenderFrame = null;
+let galleryResizeObserver = null;
+let sidebarToggleRevealTimeout = null;
 
-placeholders.forEach((item) => {
+const createPhotoCard = (item) => {
   const card = document.createElement("article");
-  card.className = "masonry-item group relative overflow-hidden rounded-xl bg-white shadow-card cursor-pointer";
+  card.className = "gallery-item photo-card group relative overflow-hidden cursor-pointer";
   card.tabIndex = 0;
   card.setAttribute("role", "button");
   card.setAttribute("aria-label", `Open ${item.title}`);
   card.innerHTML = `
-    <img src="${item.imageUrl}" alt="${item.title}" class="h-auto w-full object-cover" loading="lazy" decoding="async" />
-    <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(74,17,20,0.22),rgba(74,17,20,0.03),transparent)] opacity-0 transition duration-200 group-hover:opacity-100"></div>
-    <div class="absolute inset-x-3 top-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-      <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.title}</span>
-      <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-        <i class="fi fi-rr-bookmark text-[13px]"></i>
+    <img src="${item.imageUrl}" alt="${item.title}" class="photo-card-image h-auto w-full object-cover" loading="lazy" decoding="async" />
+    <div class="photo-card-scrim"></div>
+    <div class="photo-card-top">
+      <span class="photo-card-select" aria-hidden="true">
+        <i class="fi fi-rr-check text-[12px]"></i>
+      </span>
+      <button class="photo-card-action" aria-label="More actions">
+        <i class="fi fi-rr-menu-dots-vertical text-[13px]"></i>
       </button>
     </div>
-    <div class="absolute inset-x-3 bottom-3 flex translate-y-1 items-center justify-between opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-      <div class="flex items-center gap-2">
-        <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-          <i class="fi fi-rr-heart text-[13px]"></i>
-        </button>
-        <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-          <i class="fi fi-rr-folder-plus text-[13px]"></i>
-        </button>
-        <button class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-secondary shadow-border transition hover:bg-brand-orange50/40">
-          <i class="fi fi-rr-trash text-[13px]"></i>
-        </button>
+    <div class="photo-card-bottom">
+      <div class="photo-card-meta">
+        <span class="photo-card-date">${item.createdAt}</span>
+        <span class="photo-card-title">${item.title}</span>
       </div>
-      <span class="rounded-full bg-white px-[10px] py-[5px] text-[12px] font-medium text-instant-ink shadow-border">${item.likes}</span>
+      <span class="photo-card-count">${item.likes}</span>
     </div>
   `;
 
@@ -190,8 +194,123 @@ placeholders.forEach((item) => {
     }
   });
 
-  gallery.appendChild(card);
-});
+  return card;
+};
+
+const getJustifiedLayoutConfig = () => {
+  const width = gallery.clientWidth || outputsPanel.clientWidth || window.innerWidth;
+
+  if (width <= 640) {
+    return { targetRowHeight: 150, gap: 10, minItemsPerRow: 2 };
+  }
+
+  if (width <= 960) {
+    return { targetRowHeight: 176, gap: 10, minItemsPerRow: 2 };
+  }
+
+  if (width <= 1280) {
+    return { targetRowHeight: 188, gap: 12, minItemsPerRow: 3 };
+  }
+
+  return { targetRowHeight: 210, gap: 12, minItemsPerRow: 3 };
+};
+
+const appendRow = (fragment, items, config, forceTargetHeight = false) => {
+  if (!items.length) {
+    return;
+  }
+
+  const row = document.createElement("div");
+  row.className = "gallery-row";
+  row.style.setProperty("--gallery-gap", `${config.gap}px`);
+
+  const containerWidth = gallery.clientWidth || outputsPanel.clientWidth || window.innerWidth;
+  const totalAspectRatio = items.reduce((sum, item) => sum + item.aspectValue, 0);
+  const totalGapWidth = config.gap * Math.max(0, items.length - 1);
+  const availableWidth = Math.max(0, containerWidth - totalGapWidth);
+  const computedHeight = availableWidth / totalAspectRatio;
+  const minRowHeight = containerWidth <= 640 ? 112 : 138;
+  const rowHeight = forceTargetHeight
+    ? Math.max(minRowHeight, Math.min(config.targetRowHeight, computedHeight))
+    : Math.min(config.targetRowHeight * 1.12, Math.max(minRowHeight, computedHeight));
+
+  items.forEach((item, index) => {
+    const card = createPhotoCard(item);
+    const isLastItem = index === items.length - 1;
+    const width = isLastItem
+      ? Math.max(1, availableWidth - Array.from(row.children).reduce((sum, child) => sum + parseInt(child.style.width, 10), 0))
+      : Math.max(1, Math.floor(rowHeight * item.aspectValue));
+
+    card.style.width = `${width}px`;
+    card.style.height = `${Math.round(rowHeight)}px`;
+    row.appendChild(card);
+  });
+
+  fragment.appendChild(row);
+};
+
+const renderGallery = () => {
+  if (!gallery) {
+    return;
+  }
+
+  const config = getJustifiedLayoutConfig();
+  const fragment = document.createDocumentFragment();
+  let currentRow = [];
+  let aspectAccumulator = 0;
+  const containerWidth = gallery.clientWidth || outputsPanel.clientWidth || window.innerWidth;
+  const targetAspectSum = (containerWidth - config.gap * (config.minItemsPerRow - 1)) / config.targetRowHeight;
+
+  placeholders.forEach((item) => {
+    currentRow.push(item);
+    aspectAccumulator += item.aspectValue;
+
+    if (currentRow.length >= config.minItemsPerRow && aspectAccumulator >= targetAspectSum) {
+      appendRow(fragment, currentRow, config);
+      currentRow = [];
+      aspectAccumulator = 0;
+    }
+  });
+
+  if (currentRow.length) {
+    appendRow(fragment, currentRow, config, true);
+  }
+
+  gallery.replaceChildren(fragment);
+};
+
+const queueGalleryRender = () => {
+  if (galleryRenderFrame) {
+    window.cancelAnimationFrame(galleryRenderFrame);
+  }
+
+  galleryRenderFrame = window.requestAnimationFrame(() => {
+    renderGallery();
+    galleryRenderFrame = null;
+  });
+};
+
+const setSampleDrawerExpanded = (expanded) => {
+  if (!sampleDialogElement || !sampleDialogDrawerToggle) {
+    return;
+  }
+
+  sampleDialogElement.classList.toggle("is-drawer-expanded", expanded);
+  sampleDialogDrawerToggle.setAttribute("aria-expanded", String(expanded));
+  sampleDialogDrawerToggle.setAttribute(
+    "aria-label",
+    expanded ? "Collapse image information" : "Expand image information"
+  );
+};
+
+const syncSidebarToggleIcon = (isCollapsed) => {
+  if (!sidebarToggleIcon) {
+    return;
+  }
+
+  sidebarToggleIcon.classList.remove("fi-rr-angle-square-left", "fi-rr-angle-square-right");
+  sidebarToggleIcon.classList.add(isCollapsed ? "fi-rr-angle-square-right" : "fi-rr-angle-square-left");
+};
 
 const setMobileTab = (panel) => {
   const showWorkbench = panel === "workbench";
@@ -199,6 +318,10 @@ const setMobileTab = (panel) => {
   outputsPanel.classList.toggle("is-active", !showWorkbench);
   mobileWorkbenchTab.classList.toggle("is-active", showWorkbench);
   mobileOutputsTab.classList.toggle("is-active", !showWorkbench);
+
+  if (!showWorkbench) {
+    queueGalleryRender();
+  }
 };
 
 const closeMobileMenu = () => {
@@ -212,15 +335,45 @@ const openMobileMenu = () => {
 };
 
 sidebarToggle.addEventListener("click", () => {
+  if (sidebarToggleRevealTimeout) {
+    window.clearTimeout(sidebarToggleRevealTimeout);
+  }
+
+  sidebar.classList.add("is-toggle-suppressed");
+
   if (mobileBreakpoint.matches) {
     closeMobileMenu();
+    sidebarToggle.blur();
     return;
   }
 
   const isCollapsed = sidebar.classList.toggle("is-collapsed");
   sidebarToggle.setAttribute("aria-expanded", String(!isCollapsed));
   sidebarToggle.setAttribute("aria-label", isCollapsed ? "Expand sidebar" : "Collapse sidebar");
+  syncSidebarToggleIcon(isCollapsed);
+  sidebarToggle.blur();
+
+  if (!isCollapsed) {
+    sidebarToggleRevealTimeout = window.setTimeout(() => {
+      sidebar.classList.remove("is-toggle-suppressed");
+      sidebarToggleRevealTimeout = null;
+    }, 220);
+  }
 });
+
+if (sidebarHeader) {
+  sidebarHeader.addEventListener("mouseleave", () => {
+    sidebar.classList.remove("is-toggle-suppressed");
+    if (sidebarToggleRevealTimeout) {
+      window.clearTimeout(sidebarToggleRevealTimeout);
+      sidebarToggleRevealTimeout = null;
+    }
+  });
+}
+
+if (sidebar) {
+  syncSidebarToggleIcon(sidebar.classList.contains("is-collapsed"));
+}
 
 mobileMenuButton.addEventListener("click", () => {
   if (sidebar.classList.contains("is-mobile-open")) {
@@ -248,6 +401,7 @@ const syncResponsiveState = () => {
     mobileOutputsTab.classList.remove("is-active");
     sidebarToggle.setAttribute("aria-expanded", String(!sidebar.classList.contains("is-collapsed")));
     sidebarToggle.setAttribute("aria-label", sidebar.classList.contains("is-collapsed") ? "Expand sidebar" : "Collapse sidebar");
+    queueGalleryRender();
   }
 };
 
@@ -258,6 +412,16 @@ if (mobileBreakpoint.addEventListener) {
 }
 
 syncResponsiveState();
+queueGalleryRender();
+
+window.addEventListener("resize", queueGalleryRender);
+
+if (window.ResizeObserver && outputsPanel) {
+  galleryResizeObserver = new window.ResizeObserver(() => {
+    queueGalleryRender();
+  });
+  galleryResizeObserver.observe(outputsPanel);
+}
 
 if (window.A11yDialog && generationDialogElement) {
   const generationDialog = new window.A11yDialog(generationDialogElement);
@@ -279,8 +443,17 @@ if (window.A11yDialog && sampleDialogElement) {
   sampleDialog
     .on("show", () => {
       root.style.overflow = "hidden";
+      setSampleDrawerExpanded(false);
     })
     .on("hide", () => {
       root.style.overflow = "";
+      setSampleDrawerExpanded(false);
     });
+}
+
+if (sampleDialogDrawerToggle) {
+  sampleDialogDrawerToggle.addEventListener("click", () => {
+    const isExpanded = sampleDialogElement.classList.contains("is-drawer-expanded");
+    setSampleDrawerExpanded(!isExpanded);
+  });
 }
