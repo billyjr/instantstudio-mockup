@@ -70,6 +70,7 @@
       body { font-family: var(--font-body); background: var(--color-paper); color: var(--color-ink); }
       .app-shell {
         height: 100vh;
+        height: 100dvh;
         overflow: hidden;
       }
 
@@ -1004,13 +1005,21 @@
           width: 100%;
           padding-left: 0.75rem;
           padding-right: 0.75rem;
-          padding-top: 0.75rem;
-          padding-bottom: 0.75rem;
+          padding-top: 0.375rem;
+          padding-bottom: 0;
+        }
+
+        .app-shell {
+          height: 100vh;
+          height: 100dvh;
+          min-height: 100dvh;
         }
 
         .workbench-panel.is-active {
           display: flex !important;
-          min-height: calc(100vh - 73px);
+          min-height: 0;
+          height: calc(100vh - 73px);
+          height: calc(100dvh - 73px);
         }
 
         .workbench-form {
@@ -1021,13 +1030,14 @@
         .workbench-scroll {
           min-height: 0;
           flex: 1 1 auto;
-          padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+          padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
         }
 
         .generate-bar {
           position: sticky;
           bottom: 0;
-          padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.25rem);
+          z-index: 2;
+          padding-bottom: max(env(safe-area-inset-bottom, 0px), 0.125rem);
         }
 
         .workbench-panel,
