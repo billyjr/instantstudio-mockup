@@ -130,6 +130,7 @@ let sampleDialog = null;
 let galleryRenderFrame = null;
 let galleryResizeObserver = null;
 let sidebarToggleRevealTimeout = null;
+let scrollLockDepth = 0;
 
 const createPhotoCard = (item) => {
   const card = document.createElement("article");
@@ -305,6 +306,46 @@ const setSampleDrawerExpanded = (expanded) => {
   );
 };
 
+const lockPageScroll = () => {
+  scrollLockDepth += 1;
+
+  if (scrollLockDepth > 1) {
+    return;
+  }
+
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+};
+
+const unlockPageScroll = () => {
+  if (scrollLockDepth === 0) {
+    return;
+  }
+
+  scrollLockDepth -= 1;
+
+  if (scrollLockDepth > 0) {
+    return;
+  }
+
+  document.documentElement.style.overflow = "";
+  document.body.style.overflow = "";
+};
+
+const preventSampleDialogBackgroundScroll = (event) => {
+  if (!sampleDialogElement || sampleDialogElement.getAttribute("aria-hidden") === "true") {
+    return;
+  }
+
+  const scrollable = event.target.closest(".sample-dialog-panel-scroll");
+
+  if (scrollable) {
+    return;
+  }
+
+  event.preventDefault();
+};
+
 const syncSidebarToggleIcon = (isCollapsed) => {
   if (!sidebarToggleIcon) {
     return;
@@ -427,30 +468,32 @@ if (window.ResizeObserver && outputsPanel) {
 
 if (window.A11yDialog && generationDialogElement) {
   const generationDialog = new window.A11yDialog(generationDialogElement);
-  const root = document.documentElement;
 
   generationDialog
     .on("show", () => {
-      root.style.overflow = "hidden";
+      lockPageScroll();
     })
     .on("hide", () => {
-      root.style.overflow = "";
+      unlockPageScroll();
     });
 }
 
 if (window.A11yDialog && sampleDialogElement) {
   sampleDialog = new window.A11yDialog(sampleDialogElement);
-  const root = document.documentElement;
 
   sampleDialog
     .on("show", () => {
-      root.style.overflow = "hidden";
+      lockPageScroll();
       setSampleDrawerExpanded(false);
     })
     .on("hide", () => {
-      root.style.overflow = "";
+      unlockPageScroll();
       setSampleDrawerExpanded(false);
     });
+}
+
+if (sampleDialogElement) {
+  sampleDialogElement.addEventListener("touchmove", preventSampleDialogBackgroundScroll, { passive: false });
 }
 
 if (sampleDialogDrawerToggle) {

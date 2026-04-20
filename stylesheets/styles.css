@@ -638,6 +638,9 @@
         inset: 0;
         z-index: 90;
         display: block;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
       }
 
       .sample-dialog-shell {
@@ -1166,6 +1169,7 @@
           box-shadow: 0 -12px 40px rgba(0,0,0,0.18);
           transform: translateY(calc(100% - 96px));
           transition: transform 240ms ease;
+          touch-action: auto;
         }
 
         .sample-dialog-container.is-drawer-expanded .sample-dialog-panel {
