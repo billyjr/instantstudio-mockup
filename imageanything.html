@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instant Studio Toolkit — Image Anything</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
     <link rel="stylesheet" href="./stylesheets/styles.css">
 
     <script>
@@ -49,7 +49,7 @@
       <div id="mobileBackdrop" class="mobile-backdrop"></div>
       <div class="mobile-topbar">
         <button id="mobileMenuButton" type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-instant-ink shadow-border">
-          <i class="fi fi-rr-menu-burger text-[14px]"></i>
+          <i class="fi fi-tr-menu-burger text-[14px]"></i>
         </button>
         <div class="mobile-tabbar">
           <button id="mobileWorkbenchTab" type="button" class="mobile-tab is-active">Create</button>
@@ -57,78 +57,78 @@
         </div>
       </div>
 
-      <div class="app-layout mx-auto flex h-full max-w-[1600px]">
+      <div class="app-layout flex h-full w-full">
         <aside id="sidebar" class="sidebar-shell relative flex shrink-0 flex-col px-3 py-5 shadow-border bg-[var(--color-paper)]">
           <div class="sidebar-header mb-10 flex items-center justify-between">
             <div class="sidebar-brand-wrap flex items-center gap-3">
               <img
                 src="./images/instant-studio-logo-dark.svg"
                 alt="Instant Studio"
-                class="sidebar-brand-logo h-10 w-auto"
+                class="sidebar-brand-logo h-8 w-auto"
               />
               <img
                 src="./images/instant-studio-icon-dark.svg"
                 alt="Instant Studio"
-                class="sidebar-brand-icon h-10 w-10"
+                class="sidebar-brand-icon h-8 w-8"
               />
             </div>
-            <button id="sidebarToggle" type="button" class="sidebar-toggle flex h-9 w-9 items-center justify-center text-instant-ink transition hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar">
-              <i class="sidebar-toggle-icon fi fi-rr-angle-square-left text-[32px]"></i>
+            <button id="sidebarToggle" type="button" class="sidebar-toggle flex items-center justify-center text-instant-ink transition hover:text-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2" aria-expanded="true" aria-controls="sidebar" aria-label="Collapse sidebar">
+              <i class="sidebar-toggle-icon fi fi-tr-angle-square-left text-[24px]"></i>
             </button>
           </div>
 
           <nav class="space-y-1">
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-generations.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-sparkles nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Generations</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-portfolios.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-gallery nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Portfolios</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg bg-brand-secondary px-3 py-2.5 text-[14px] font-medium text-white">
               <span class="flex h-5 w-5 items-center justify-center text-brand-primary">
-                <img src="./images/icon-image-anything.svg" alt="" class="nav-icon nav-icon-active" />
+                <i class="fi fi-tr-picture nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Image Anything</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-image-to-video.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-screen-play nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Image to Video</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-audio.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-waveform nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Audio</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-canvas.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-pencil-paintbrush nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Canvas</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-remove-background.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-eraser nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Remove background</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-workflow.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-workflow nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Workflows</span>
             </a>
             <a href="#" class="sidebar-nav-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-medium text-instant-ink transition hover:bg-white/70">
               <span class="flex h-5 w-5 items-center justify-center text-instant-ink">
-                <img src="./images/icon-tshirt.svg" alt="" class="nav-icon" />
+                <i class="fi fi-tr-shirt nav-icon" aria-hidden="true"></i>
               </span>
               <span class="nav-label">Virtual Try-on</span>
             </a>
@@ -144,14 +144,14 @@
               <div class="sidebar-user-meta min-w-0 flex flex-col items-start gap-2.5">
                 <div class="queue-status-row queue-pill flex items-center gap-2 whitespace-nowrap text-[13px] font-medium leading-none text-instant-ink">
                   <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#61C46E] text-[#18341A]">
-                    <i class="fi fi-rr-check text-[11px]"></i>
+                    <i class="fi fi-tr-check text-[11px]"></i>
                   </span>
                   <span class="queue-status-text">Queue: All Clear</span>
                 </div>
 
                 <div class="credits-row credit-pill inline-flex items-center gap-2 whitespace-nowrap">
                   <span class="inline-flex h-6 w-6 items-center justify-center text-[#F2BA39]">
-                    <i class="fi fi-rr-bolt text-[16px]"></i>
+                    <i class="fi fi-tr-bolt text-[16px]"></i>
                   </span>
                   <span class="credits-label font-functional text-[12px] uppercase tracking-[0.08em] text-instant-inkLite">Credits</span>
                   <span class="credits-value text-[20px] font-medium leading-none tracking-[-0.03em] text-instant-ink">1250</span>
@@ -161,9 +161,9 @@
           </div>
         </aside>
 
-        <section id="workbenchPanel" class="workbench-panel app-column is-active flex w-[440px] shrink-0 flex-col p-3 shadow-border bg-white">
+        <section id="workbenchPanel" class="workbench-panel app-column is-active flex w-[400px] shrink-0 flex-col p-3 shadow-border bg-white">
           <form class="workbench-form flex min-h-0 flex-1 flex-col">
-            <div class="workbench-scroll scrollbar-hidden min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
+            <div class="workbench-scroll scrollbar-hidden min-h-0 flex-1 space-y-6 overflow-y-auto">
               <div>
               <label class="mb-2 block text-sm font-medium text-gray-900">Model</label>
               <div class="relative">
@@ -173,7 +173,7 @@
                   <option>GPT Image 1.5</option>
                   <option>SeeDream 4.5</option>
                 </select>
-                <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
+                <i class="fi fi-tr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
               </div>
               </div>
 
@@ -197,7 +197,7 @@
                 </div>
                 <label class="block cursor-pointer rounded-md border border-dashed border-gray-300 bg-white p-6 text-center transition hover:bg-gray-50">
                   <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-md bg-gray-50 text-gray-400">
-                    <i class="fi fi-rr-picture text-sm"></i>
+                    <i class="fi fi-tr-picture text-sm"></i>
                   </div>
                   <p class="mt-4 text-sm font-medium text-gray-900">Drag images here or <span class="text-brand-primary">click to upload</span></p>
                   <p class="mt-1 text-sm leading-6 text-gray-500">PNG, JPG, WEBP · portrait, style, or object references</p>
@@ -211,7 +211,7 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-4">
                 <div>
                   <label class="mb-2 block text-sm font-medium text-gray-900">Aspect Ratio</label>
                   <div class="relative">
@@ -222,7 +222,7 @@
                       <option>16:9 Landscape</option>
                       <option>9:16 Vertical</option>
                     </select>
-                    <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
+                    <i class="fi fi-tr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
                   </div>
                 </div>
                 <div>
@@ -234,7 +234,7 @@
                       <option>1536 × 1024</option>
                       <option>1024 × 1536</option>
                     </select>
-                    <i class="fi fi-rr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
+                    <i class="fi fi-tr-angle-small-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
                   </div>
                 </div>
               </div>
@@ -242,7 +242,7 @@
 
             <div class="generate-bar shrink-0 border-t border-black/5 bg-white/95 pt-4 backdrop-blur">
               <button type="button" data-a11y-dialog-show="generation-dialog" class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-primary px-4 py-2.5 text-sm font-medium text-brand-secondary shadow-sm transition hover:bg-brand-orange300 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:ring-offset-2">
-                <i class="fi fi-rr-sparkles text-[13px]"></i>
+                <i class="fi fi-tr-sparkles text-[13px]"></i>
                 Generate
               </button>
             </div>
@@ -259,7 +259,7 @@
       <div class="dialog-overlay" data-a11y-dialog-hide></div>
       <div class="dialog-content shadow-card" role="document">
         <button type="button" class="dialog-close" data-a11y-dialog-hide aria-label="Close dialog">
-          <i class="fi fi-rr-cross-small text-[16px]"></i>
+          <i class="fi fi-tr-cross-small text-[16px]"></i>
         </button>
 
         <div class="dialog-badge font-functional">generation queued</div>
@@ -298,25 +298,25 @@
       <div class="sample-dialog-shell" role="document">
         <div class="sample-dialog-stage">
           <button type="button" class="sample-dialog-close sample-dialog-close-stage sample-dialog-stage-close" data-a11y-dialog-hide aria-label="Close image preview">
-            <i class="fi fi-rr-cross-small text-[18px]"></i>
+            <i class="fi fi-tr-cross-small text-[18px]"></i>
           </button>
 
           <div class="sample-dialog-toolbar">
             <button type="button" class="sample-dialog-toolbar-button sample-dialog-toolbar-close" data-a11y-dialog-hide aria-label="Close image preview">
-              <i class="fi fi-rr-cross-small text-[18px]"></i>
+              <i class="fi fi-tr-cross-small text-[18px]"></i>
             </button>
             <div class="sample-dialog-toolbar-actions">
               <button type="button" class="sample-dialog-toolbar-button" aria-label="Share sample">
-                <i class="fi fi-rr-share text-[15px]"></i>
+                <i class="fi fi-tr-share text-[15px]"></i>
               </button>
               <button type="button" class="sample-dialog-toolbar-button" aria-label="Download sample">
-                <i class="fi fi-rr-download text-[15px]"></i>
+                <i class="fi fi-tr-download text-[15px]"></i>
               </button>
               <button type="button" class="sample-dialog-toolbar-button" aria-label="Edit sample">
-                <i class="fi fi-rr-pencil text-[15px]"></i>
+                <i class="fi fi-tr-pencil text-[15px]"></i>
               </button>
               <button type="button" class="sample-dialog-toolbar-button" aria-label="Favorite sample">
-                <i class="fi fi-rr-star text-[15px]"></i>
+                <i class="fi fi-tr-star text-[15px]"></i>
               </button>
             </div>
           </div>
@@ -336,7 +336,7 @@
           </button>
 
           <button type="button" class="sample-dialog-close" data-a11y-dialog-hide aria-label="Close image details">
-            <i class="fi fi-rr-cross-small text-[18px]"></i>
+            <i class="fi fi-tr-cross-small text-[18px]"></i>
           </button>
 
           <div id="sampleDialogPanelScroll" class="sample-dialog-panel-scroll">

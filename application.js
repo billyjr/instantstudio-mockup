@@ -142,10 +142,10 @@ const createPhotoCard = (item) => {
     <div class="photo-card-scrim"></div>
     <div class="photo-card-top">
       <span class="photo-card-select" aria-hidden="true">
-        <i class="fi fi-rr-check text-[12px]"></i>
+        <i class="fi fi-tr-check text-[12px]"></i>
       </span>
       <button class="photo-card-action" aria-label="More actions">
-        <i class="fi fi-rr-menu-dots-vertical text-[13px]"></i>
+        <i class="fi fi-tr-menu-dots-vertical text-[13px]"></i>
       </button>
     </div>
     <div class="photo-card-bottom">
@@ -237,9 +237,11 @@ const appendRow = (fragment, items, config, forceTargetHeight = false) => {
   items.forEach((item, index) => {
     const card = createPhotoCard(item);
     const isLastItem = index === items.length - 1;
-    const width = isLastItem
-      ? Math.max(1, availableWidth - Array.from(row.children).reduce((sum, child) => sum + parseInt(child.style.width, 10), 0))
-      : Math.max(1, Math.floor(rowHeight * item.aspectValue));
+    const width = forceTargetHeight
+      ? Math.max(1, Math.round(rowHeight * item.aspectValue))
+      : isLastItem
+        ? Math.max(1, availableWidth - Array.from(row.children).reduce((sum, child) => sum + parseInt(child.style.width, 10), 0))
+        : Math.max(1, Math.floor(rowHeight * item.aspectValue));
 
     card.style.width = `${width}px`;
     card.style.height = `${Math.round(rowHeight)}px`;
@@ -308,8 +310,8 @@ const syncSidebarToggleIcon = (isCollapsed) => {
     return;
   }
 
-  sidebarToggleIcon.classList.remove("fi-rr-angle-square-left", "fi-rr-angle-square-right");
-  sidebarToggleIcon.classList.add(isCollapsed ? "fi-rr-angle-square-right" : "fi-rr-angle-square-left");
+  sidebarToggleIcon.classList.remove("fi-tr-angle-square-left", "fi-tr-angle-square-right");
+  sidebarToggleIcon.classList.add(isCollapsed ? "fi-tr-angle-square-right" : "fi-tr-angle-square-left");
 };
 
 const setMobileTab = (panel) => {
