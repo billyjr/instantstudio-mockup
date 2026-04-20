@@ -641,6 +641,8 @@
         overflow: hidden;
         overscroll-behavior: none;
         touch-action: none;
+        background: #050505;
+        isolation: isolate;
       }
 
       .sample-dialog-shell {
@@ -1127,21 +1129,26 @@
 
         .sample-dialog-shell {
           display: block;
-          position: relative;
+          position: fixed;
+          inset: 0;
           width: 100vw;
           height: 100vh;
           height: 100dvh;
+          overflow: hidden;
         }
 
         .sample-dialog-stage {
-          position: absolute;
+          position: fixed;
           inset: 0;
           padding: calc(env(safe-area-inset-top, 0px) + 4rem) 0 0;
+          height: 100vh;
+          height: 100dvh;
           min-height: 100vh;
           min-height: 100dvh;
           align-items: flex-start;
           justify-content: center;
           background: #050505;
+          z-index: 1;
         }
 
         .sample-dialog-image {
@@ -1156,7 +1163,7 @@
         }
 
         .sample-dialog-panel {
-          position: absolute;
+          position: fixed;
           left: 0;
           right: 0;
           bottom: 0;
